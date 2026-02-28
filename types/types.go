@@ -1,3 +1,4 @@
+// general types
 package types
 
 type VhostUserMsg struct {
