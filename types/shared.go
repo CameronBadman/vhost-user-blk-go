@@ -5,7 +5,6 @@ type VHostUserShared struct {
 }
 
 func (payload *VHostUserShared) ToBinary(buf []byte) (int, error) {
-	copy(buf[0:], payload.UUID[:])
-	//16
-	return 16, nil
+	b := castToBytes(payload)
+	return copy(buf, b), nil
 }
