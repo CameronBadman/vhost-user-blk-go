@@ -1,4 +1,4 @@
-package types
+package wires
 
 type VHostUserShared struct {
 	UUID [16]byte

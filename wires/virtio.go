@@ -1,5 +1,5 @@
 // Package types with serialisation
-package types
+package wires
 
 import "encoding/binary"
 

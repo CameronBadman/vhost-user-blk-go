@@ -1,4 +1,4 @@
-package types
+package wires
 
 type MemRegionDesc struct {
 	GuestAdd   uint64

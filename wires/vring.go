@@ -1,4 +1,4 @@
-package types
+package wires
 
 type VringState struct {
 	Index uint32

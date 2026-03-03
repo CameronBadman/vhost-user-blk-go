@@ -1,4 +1,4 @@
-package types
+package wires
 
 type IOTLBMessage struct {
 	Iova        uint64
