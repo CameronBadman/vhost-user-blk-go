@@ -7,8 +7,6 @@ type InflightDesc struct {
 	MmapOffset uint64
 	NumQueues  uint16
 	QueueSize  uint16
-	//
-	pad [4]byte
 }
 
 var _ = [1]struct{}{}[unsafe.Sizeof(InflightDesc{})-24]
