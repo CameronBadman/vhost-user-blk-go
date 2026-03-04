@@ -3,19 +3,27 @@ package transport
 import "net"
 
 type Socket struct {
-	listener net.Listener
+	Listener net.Listener
 	Conn     net.Conn
-	// 12 (header) + 4096 (max payload)
-	Buf [4108]byte
+	Buf      [4108]byte
 }
 
-func New(path string) (*Socket, error) {
+func NewSocket(path string) (*Socket, error) {
 	l, err := net.Listen("unix", "/tmp/vhost.sock")
 	if err != nil {
 		panic(err)
 	}
 
 	return &Socket{
-		listener: l,
+		Listener: l,
 	}, nil
+}
+
+func (s *Socket) Accept() error {
+	conn, err := s.Listener.Accept()
+	if err != nil {
+		return err
+	}
+	s.Conn = conn
+	return nil
 }
