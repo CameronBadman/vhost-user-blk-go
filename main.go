@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	path := "/tmp/vhost.sock"
+	path := "/tmp/vhost-blk.sock"
 	socket, err := transport.NewSocket(path)
 	if err != nil {
 		panic(err)

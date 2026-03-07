@@ -9,7 +9,7 @@ type Socket struct {
 }
 
 func NewSocket(path string) (*Socket, error) {
-	l, err := net.Listen("unix", "/tmp/vhost.sock")
+	l, err := net.Listen("unix", path)
 	if err != nil {
 		panic(err)
 	}
