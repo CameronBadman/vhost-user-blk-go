@@ -1,0 +1,13 @@
+qemu-system-x86_64 \
+  -enable-kvm \
+  -m 512M \
+  -object memory-backend-memfd,id=mem,size=512M,share=on \
+  -numa node,memdev=mem \
+  -cpu host \
+  -drive file=test-vm.qcow2,if=virtio \
+  -chardev socket,id=vhost-blk0,path=/tmp/vhost-blk.sock \
+  -device vhost-user-blk-pci,chardev=vhost-blk0,num-queues=1 \
+  -nographic \
+  -serial mon:stdio \
+  -netdev user,id=net0 \
+  -device virtio-net-pci,netdev=net0
