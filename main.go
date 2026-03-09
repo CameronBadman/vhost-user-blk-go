@@ -16,7 +16,7 @@ func main() {
 		panic(err)
 	}
 
-	SetCleanExit(socket)
+	SetCleanExit(socket, path)
 
 	err = socket.Accept()
 	if err != nil {
@@ -24,21 +24,28 @@ func main() {
 	}
 
 	for {
-		n, err := socket.Conn.Read(socket.Buf[:])
+		n, err := socket.Recv()
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%x\n", socket.Buf[:n])
+		fmt.Printf("%x\n", n)
 	}
 }
 
-func SetCleanExit(socket *transport.Socket) {
+func SetCleanExit(socket *transport.Socket, path string) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT)
 	go func() {
 		<-sigChan
-		socket.Listener.Close()
-		os.Remove("/tmp/vhost-blk.sock")
+		err := socket.Listener.Close()
+		if err != nil {
+			panic(err)
+		}
+
+		err = os.Remove(path)
+		if err != nil {
+			panic(err)
+		}
 		os.Exit(0)
 	}()
 }
