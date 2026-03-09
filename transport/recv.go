@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"vhost-go/types"
 	"vhost-go/wires"
 )
 
@@ -28,8 +29,8 @@ func (s *Socket) Recv() (*wires.VhostUserMsg, error) {
 	}
 
 	return &wires.VhostUserMsg{
-		Request: request,
-		Flags:   flags,
+		Request: types.MsgType(request),
+		Flags:   types.MsgFlag(flags),
 		Size:    size,
 		Payload: s.Buf[12:payloadSize],
 	}, nil
