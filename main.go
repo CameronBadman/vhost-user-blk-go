@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"vhost-go/transport"
+	"vhost-go/util"
 )
 
 func main() {
@@ -16,7 +14,10 @@ func main() {
 		panic(err)
 	}
 
-	SetCleanExit(socket, path)
+	// sets the signal clean
+	util.SetCleanExit(socket, path)
+	// sets clean exit on panic
+	defer util.CleanExit(socket, path)
 
 	err = socket.Accept()
 	if err != nil {
@@ -30,22 +31,4 @@ func main() {
 		}
 		fmt.Printf("%x\n", n)
 	}
-}
-
-func SetCleanExit(socket *transport.Socket, path string) {
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT)
-	go func() {
-		<-sigChan
-		err := socket.Listener.Close()
-		if err != nil {
-			panic(err)
-		}
-
-		err = os.Remove(path)
-		if err != nil {
-			panic(err)
-		}
-		os.Exit(0)
-	}()
 }
