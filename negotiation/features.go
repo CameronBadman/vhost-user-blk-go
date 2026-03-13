@@ -19,3 +19,8 @@ func getFeatures(socket *transport.Socket) error {
 	binary.LittleEndian.PutUint64(reply.Payload, blk.SupportedFeatures())
 	return socket.Send(reply)
 }
+
+func setFeatures(dev *blk.Device, msg *wires.VhostUserMsg) error {
+	dev.Features = binary.LittleEndian.Uint64(msg.Payload)
+	return nil
+}

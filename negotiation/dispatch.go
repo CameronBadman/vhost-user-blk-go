@@ -11,6 +11,9 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 	switch msg.Request {
 	case types.MsgGetFeatures:
 		return getFeatures(socket)
+
+	case types.MsgSetFeatures:
+		return setFeatures(dev, msg)
 	}
 	return nil
 }
