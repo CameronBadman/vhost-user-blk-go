@@ -14,6 +14,13 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 
 	case types.MsgSetFeatures:
 		return setFeatures(dev, msg)
+
+	case types.MsgGetProtocolFeatures:
+		return getProtocolFeatures(socket)
+
+	case types.MsgSetProtocolFeatures:
+		return setProtocolFeatures(dev, msg)
+
 	}
 	return nil
 }
