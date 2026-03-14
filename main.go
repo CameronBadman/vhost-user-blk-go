@@ -12,7 +12,6 @@ import (
 func main() {
 	path := "/tmp/vhost-blk.sock"
 	socket, err := transport.NewSocket(path)
-	device := blk.NewDevice()
 	if err != nil {
 		panic(err)
 	}
@@ -27,16 +26,18 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		device := blk.NewDevice()
 		for {
 			n, err := socket.Recv()
+
+			fmt.Printf("%x\n", n)
 			if err != nil {
-				break
+				panic(err)
 			}
 			err = negotiation.Dispatch(device, socket, n)
 			if err != nil {
-				break
+				panic(err)
 			}
-			fmt.Printf("%x\n", n)
 		}
 	}
 }

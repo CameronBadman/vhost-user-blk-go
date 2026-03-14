@@ -10,6 +10,7 @@ import (
 func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
 	switch msg.Request {
 	case types.MsgGetFeatures:
+
 		return getFeatures(socket)
 
 	case types.MsgSetFeatures:
@@ -20,7 +21,7 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 
 	case types.MsgSetProtocolFeatures:
 		return setProtocolFeatures(dev, msg)
-
+	case types.MsgSetMemTable:
 	}
 	return nil
 }

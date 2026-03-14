@@ -1,17 +1,22 @@
 package transport
 
-import "net"
+import (
+	"net"
+)
 
 type Socket struct {
-	Listener net.Listener
-	Conn     net.Conn
+	Listener *net.UnixListener
+	Conn     *net.UnixConn
 	Buf      [4108]byte
+	// should be enough space for 8 file descriptors
+	Oob [128]byte
 }
 
 func NewSocket(path string) (*Socket, error) {
-	l, err := net.Listen("unix", path)
+	addr := &net.UnixAddr{Name: path, Net: "unix"}
+	l, err := net.ListenUnix("unix", addr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return &Socket{
@@ -20,7 +25,7 @@ func NewSocket(path string) (*Socket, error) {
 }
 
 func (s *Socket) Accept() error {
-	conn, err := s.Listener.Accept()
+	conn, err := s.Listener.AcceptUnix()
 	if err != nil {
 		return err
 	}

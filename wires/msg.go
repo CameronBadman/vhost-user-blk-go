@@ -11,6 +11,7 @@ type VhostUserMsg struct {
 	Flags   types.MsgFlag
 	Size    uint32
 	Payload []byte
+	Fds     []int
 }
 
 func (payload *VhostUserMsg) ToBinary(buf []byte) (int, error) {
