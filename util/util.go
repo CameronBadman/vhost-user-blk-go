@@ -8,17 +8,16 @@ import (
 	"vhost-go/transport"
 )
 
-func CleanExit(socket *transport.Socket, path string) error {
+func CleanExit(socket *transport.Socket, path string) {
 	err := socket.Listener.Close()
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	err = os.Remove(path)
 	if err != nil {
-		return err
+		panic(err)
 	}
-	return nil
 }
 
 func SetCleanExit(socket *transport.Socket, path string) {
