@@ -39,7 +39,7 @@ func getProtocolFeatures(socket *transport.Socket) error {
 	return socket.Send(reply)
 }
 
-func setProtocolFeatures(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
+func setProtocolFeatures(dev *blk.Device, msg *wires.VhostUserMsg) error {
 	dev.ProtocolFreatures = binary.LittleEndian.Uint64(msg.Payload)
 	return nil
 }
