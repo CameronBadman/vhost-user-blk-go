@@ -23,7 +23,9 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 		return setProtocolFeatures(dev, socket, msg)
 	case types.MsgSetMemTable:
 		return setMemTable(dev, socket, msg)
-
+	case types.MsgGetQueueNum:
+		return getQueueNum(dev, socket, msg)
 	}
+
 	return nil
 }

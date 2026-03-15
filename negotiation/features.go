@@ -52,3 +52,14 @@ func setMemTable(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUser
 	dev.MemTable = t
 	return socket.SendAck(msg)
 }
+
+func getQueueNum(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
+	reply := &wires.VhostUserMsg{
+		Request: types.MsgGetQueueNum,
+		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
+		Size:    8,
+		Payload: make([]byte, 8),
+	}
+	binary.LittleEndian.PutUint64(reply.Payload, 1)
+	return socket.Send(reply)
+}
