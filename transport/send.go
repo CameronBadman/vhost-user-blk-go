@@ -2,7 +2,9 @@ package transport
 
 import (
 	"encoding/binary"
+	"log"
 
+	"vhost-go/types"
 	"vhost-go/wires"
 )
 
@@ -13,9 +15,20 @@ func (s *Socket) Send(msg *wires.VhostUserMsg) error {
 	copy(s.Buf[12:], msg.Payload)
 
 	_, err := s.Conn.Write(s.Buf[:12+msg.Size])
+
+	log.Printf("sending bytes: %x", s.Buf[:12+msg.Size])
+
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *Socket) SendAck(msg *wires.VhostUserMsg) error {
+	return s.Send(&wires.VhostUserMsg{
+		Request: msg.Request,
+		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
+		Size:    msg.Size,
+	})
 }

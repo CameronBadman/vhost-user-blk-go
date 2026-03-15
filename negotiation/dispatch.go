@@ -20,8 +20,10 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 		return getProtocolFeatures(socket)
 
 	case types.MsgSetProtocolFeatures:
-		return setProtocolFeatures(dev, msg)
+		return setProtocolFeatures(dev, socket, msg)
 	case types.MsgSetMemTable:
+		return setMemTable(dev, socket, msg)
+
 	}
 	return nil
 }

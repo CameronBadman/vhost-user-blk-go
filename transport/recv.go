@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"log"
 	"syscall"
 
 	"vhost-go/types"
@@ -30,6 +31,8 @@ func (s *Socket) Recv() (*wires.VhostUserMsg, error) {
 			return nil, err
 		}
 	}
+
+	log.Printf("recv: %x", s.Buf[:12+size])
 
 	var fds []int
 	if oobn > 0 {

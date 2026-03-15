@@ -2,8 +2,10 @@ package negotiation
 
 import (
 	"encoding/binary"
+	"fmt"
 
 	"vhost-go/blk"
+	"vhost-go/memory"
 	"vhost-go/transport"
 	"vhost-go/types"
 	"vhost-go/wires"
@@ -37,7 +39,16 @@ func getProtocolFeatures(socket *transport.Socket) error {
 	return socket.Send(reply)
 }
 
-func setProtocolFeatures(dev *blk.Device, msg *wires.VhostUserMsg) error {
+func setProtocolFeatures(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
 	dev.ProtocolFreatures = binary.LittleEndian.Uint64(msg.Payload)
 	return nil
+}
+
+func setMemTable(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
+	t, err := memory.ParseAndMap(msg.Payload, msg.Fds)
+	if err != nil {
+		return fmt.Errorf("SET_MEM_TABLE: %w", err)
+	}
+	dev.MemTable = t
+	return socket.SendAck(msg)
 }

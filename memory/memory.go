@@ -20,12 +20,12 @@ type Table struct {
 	Regions []Region
 }
 
-// TODO ATOMICITY IS NEEDED HERE
 func ParseAndMap(payload []byte, fds []int) (*Table, error) {
 	nregions := binary.LittleEndian.Uint32(payload[0:4])
 	regions := make([]Region, nregions)
 	for i := 0; i < int(nregions); i++ {
 		off := 8 + i*32
+		// TODO ATOMICITY IS NEEDED HERE
 		r := Region{
 			GuestPhysAddr: binary.LittleEndian.Uint64(payload[off+0:]),
 			Size:          binary.LittleEndian.Uint64(payload[off+8:]),
@@ -45,7 +45,10 @@ func ParseAndMap(payload []byte, fds []int) (*Table, error) {
 			return nil, fmt.Errorf("mmap region %d: %w", i, errno)
 		}
 		r.HostAddr = addr
-		unix.Close(fds[i])
+		err := unix.Close(fds[i])
+		if err != nil {
+			return nil, err
+		}
 		regions[i] = r
 	}
 	return &Table{Regions: regions}, nil
