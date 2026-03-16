@@ -36,7 +36,7 @@ func main() {
 				log.Printf("connection closed: %v", err)
 				break
 			}
-			log.Printf("dispatch: request=0x%x", n.Request)
+			log.Printf("dispatch: %s", n.Request)
 			err = negotiation.Dispatch(device, socket, n)
 			if err != nil {
 				panic(err)

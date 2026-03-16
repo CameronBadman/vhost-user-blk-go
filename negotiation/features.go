@@ -55,11 +55,38 @@ func setMemTable(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUser
 
 func getQueueNum(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
 	reply := &wires.VhostUserMsg{
-		Request: types.MsgGetQueueNum,
+		Request: msg.Request,
 		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
 		Size:    8,
 		Payload: make([]byte, 8),
 	}
 	binary.LittleEndian.PutUint64(reply.Payload, 1)
+	return socket.Send(reply)
+}
+
+func getConfig(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
+	offset := binary.LittleEndian.Uint32(msg.Payload[0:4])
+	size := binary.LittleEndian.Uint32(msg.Payload[4:8])
+	flags := binary.LittleEndian.Uint32(msg.Payload[8:12])
+
+	var raw [64]byte
+	dev.Config.ToBinary(raw[:])
+
+	resp := wires.VirtioDevice{
+		Offset:  offset,
+		Size:    size,
+		Flags:   flags,
+		Payload: raw[offset : offset+size],
+	}
+
+	payload := make([]byte, 12+size)
+	resp.ToBinary(payload)
+
+	reply := &wires.VhostUserMsg{
+		Request: msg.Request,
+		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
+		Size:    12 + size,
+		Payload: payload,
+	}
 	return socket.Send(reply)
 }

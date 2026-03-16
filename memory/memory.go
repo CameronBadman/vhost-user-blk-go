@@ -26,6 +26,7 @@ func ParseAndMap(payload []byte, fds []int) (*Table, error) {
 	for i := 0; i < int(nregions); i++ {
 		off := 8 + i*32
 		// TODO ATOMICITY IS NEEDED HERE
+		// otherwise it can leak
 		r := Region{
 			GuestPhysAddr: binary.LittleEndian.Uint64(payload[off+0:]),
 			Size:          binary.LittleEndian.Uint64(payload[off+8:]),
