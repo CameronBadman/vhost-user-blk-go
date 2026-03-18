@@ -24,6 +24,5 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 	case types.MsgGetConfig:
 		return getConfig(dev, socket, msg)
 	}
-
 	return nil
 }

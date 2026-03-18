@@ -65,27 +65,14 @@ func getQueueNum(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUser
 }
 
 func getConfig(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
-	offset := binary.LittleEndian.Uint32(msg.Payload[0:4])
-	size := binary.LittleEndian.Uint32(msg.Payload[4:8])
-	flags := binary.LittleEndian.Uint32(msg.Payload[8:12])
-
+	req := wires.ParseVirtioDevice(msg.Payload)
 	var raw [64]byte
 	dev.Config.ToBinary(raw[:])
-
-	resp := wires.VirtioDevice{
-		Offset:  offset,
-		Size:    size,
-		Flags:   flags,
-		Payload: raw[offset : offset+size],
-	}
-
-	payload := make([]byte, 12+size)
-	resp.ToBinary(payload)
-
+	payload := raw[req.Offset : req.Offset+req.Size]
 	reply := &wires.VhostUserMsg{
 		Request: msg.Request,
 		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
-		Size:    12 + size,
+		Size:    req.Size,
 		Payload: payload,
 	}
 	return socket.Send(reply)

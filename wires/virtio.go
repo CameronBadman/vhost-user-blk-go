@@ -13,6 +13,18 @@ type VirtioDevice struct {
 	Payload []byte
 }
 
+func ParseVirtioDevice(bytes []byte) *VirtioDevice {
+	offset := binary.LittleEndian.Uint32(bytes[0:4])
+	size := binary.LittleEndian.Uint32(bytes[4:8])
+	flags := binary.LittleEndian.Uint32(bytes[8:12])
+	return &VirtioDevice{
+		Offset:  offset,
+		Size:    size,
+		Flags:   flags,
+		Payload: bytes[12 : 12+size],
+	}
+}
+
 func (payload *VirtioDevice) ToBinary(buf []byte) (int, error) {
 	binary.LittleEndian.PutUint32(buf[0:], payload.Offset)
 	binary.LittleEndian.PutUint32(buf[4:], payload.Size)

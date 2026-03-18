@@ -10,6 +10,10 @@ func (payload *VringState) ToBinary(buf []byte) (int, error) {
 	return copy(buf, b), nil
 }
 
+func VringStateBinary(buf []byte) (*VringState, error) {
+	return nil, nil
+}
+
 type VringDesc struct {
 	Index      uint32
 	AvailIndex uint32
@@ -20,6 +24,10 @@ func (payload *VringDesc) ToBinary(buf []byte) (int, error) {
 	return copy(buf, b), nil
 }
 
+func ParseVringDesc(buf []byte) (*VringDesc, error) {
+	return nil, nil
+}
+
 type VringDescIndices struct {
 	Index       uint32
 	DescIndices uint32
@@ -28,6 +36,10 @@ type VringDescIndices struct {
 func (payload *VringDescIndices) ToBinary(buf []byte) (int, error) {
 	b := castToBytes(payload)
 	return copy(buf, b), nil
+}
+
+func ParseVringDescIndices(buf []byte) (*VringDesc, error) {
+	return nil, nil
 }
 
 type VringAddDesc struct {
