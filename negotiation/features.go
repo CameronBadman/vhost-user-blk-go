@@ -78,3 +78,12 @@ func getConfig(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMs
 	}
 	return socket.Send(reply)
 }
+
+func sendNotImplemented(socket *transport.Socket, msg *wires.VhostUserMsg) error {
+	reply := &wires.VhostUserMsg{
+		Request: msg.Request,
+		Flags:   types.MsgFlagVersion | types.MsgFlagReply | types.MsgFlagErrMsg,
+		Size:    0,
+	}
+	return socket.Send(reply)
+}
