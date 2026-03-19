@@ -87,3 +87,8 @@ func sendNotImplemented(socket *transport.Socket, msg *wires.VhostUserMsg) error
 	}
 	return socket.Send(reply)
 }
+
+func setOwner(dev *blk.Device) error {
+	dev.Owned = true
+	return nil
+}

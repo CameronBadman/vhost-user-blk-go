@@ -23,6 +23,8 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 		return getQueueNum(dev, socket, msg)
 	case types.MsgGetConfig:
 		return getConfig(dev, socket, msg)
+	case types.MsgSetOwner:
+		return setOwner(dev)
 	default:
 		return sendNotImplemented(socket, msg)
 	}

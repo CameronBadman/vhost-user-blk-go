@@ -11,6 +11,7 @@ type Device struct {
 	MemTable          *memory.Table
 	NumQueues         uint64
 	Config            wires.VirtioBlkConfig
+	Owned             bool
 }
 
 func NewDevice() *Device {
