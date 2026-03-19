@@ -66,14 +66,15 @@ func getQueueNum(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUser
 
 func getConfig(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg) error {
 	req := wires.ParseVirtioDevice(msg.Payload)
-	var raw [64]byte
-	dev.Config.ToBinary(raw[:])
-	payload := raw[req.Offset : req.Offset+req.Size]
+	raw := dev.Config.AsBytes()
+	if uint32(len(raw)) < req.Offset+req.Size {
+		return fmt.Errorf("config request out of bounds: offset=%d size=%d", req.Offset, req.Size)
+	}
 	reply := &wires.VhostUserMsg{
 		Request: msg.Request,
 		Flags:   types.MsgFlagVersion | types.MsgFlagReply,
 		Size:    req.Size,
-		Payload: payload,
+		Payload: raw[req.Offset : req.Offset+req.Size],
 	}
 	return socket.Send(reply)
 }

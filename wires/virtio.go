@@ -58,6 +58,10 @@ type VirtioBlkConfig struct {
 	Unused1            [3]uint8
 }
 
+func (data *VirtioBlkConfig) AsBytes() []byte {
+	return unsafe.Slice((*byte)(unsafe.Pointer(data)), unsafe.Sizeof(*data))
+}
+
 var _ [64]struct{} = [unsafe.Sizeof(VirtioBlkConfig{})]struct{}{}
 
 func (data *VirtioBlkConfig) ToBinary(buf []byte) (int, error) {
