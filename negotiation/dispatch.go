@@ -25,6 +25,18 @@ func Dispatch(dev *blk.Device, socket *transport.Socket, msg *wires.VhostUserMsg
 		return getConfig(dev, socket, msg)
 	case types.MsgSetOwner:
 		return setOwner(dev)
+	case types.MsgSetVringNum:
+		return sendNotImplemented(socket, msg)
+	case types.MsgSetVringAddr:
+		return sendNotImplemented(socket, msg)
+	case types.MsgSetVringBase:
+		return sendNotImplemented(socket, msg)
+	case types.MsgSetVringKick:
+		return sendNotImplemented(socket, msg)
+	case types.MsgSetVringCall:
+		return sendNotImplemented(socket, msg)
+	case types.MsgSetVringEnable:
+		return sendNotImplemented(socket, msg)
 	default:
 		return sendNotImplemented(socket, msg)
 	}
