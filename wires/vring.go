@@ -12,8 +12,11 @@ func (payload *VringState) ToBinary(buf []byte) (int, error) {
 	return copy(buf, b), nil
 }
 
-func VringStateBinary(buf []byte) (*VringState, error) {
-	return nil, nil
+func ParseVringState(buf []byte) (*VringState, error) {
+	return &VringState{
+		Index: binary.LittleEndian.Uint32(buf[0:4]),
+		Num:   binary.LittleEndian.Uint32(buf[5:8]),
+	}, nil
 }
 
 type VringDesc struct {
@@ -27,7 +30,10 @@ func (payload *VringDesc) ToBinary(buf []byte) (int, error) {
 }
 
 func ParseVringDesc(buf []byte) (*VringDesc, error) {
-	return nil, nil
+	return &VringDesc{
+		Index:      binary.LittleEndian.Uint32(buf[0:4]),
+		AvailIndex: binary.LittleEndian.Uint32(buf[5:8]),
+	}, nil
 }
 
 type VringDescIndices struct {
@@ -45,7 +51,6 @@ func ParseVringDescIndices(buf []byte) (*VringDescIndices, error) {
 		Index:       binary.LittleEndian.Uint32(buf[0:4]),
 		DescIndices: binary.LittleEndian.Uint32(buf[5:8]),
 	}, nil
-	return nil, nil
 }
 
 type VringAddDesc struct {
